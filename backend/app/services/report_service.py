@@ -41,7 +41,7 @@ def csv_safe(value: object) -> str:
 
 def to_csv(header: list[str], rows: list[list[object]]) -> str:
     out = io.StringIO()
-    writer = csv.writer(out, lineterminator="\n")
+    writer = csv.writer(out, delimiter=";", lineterminator="\r\n")
     writer.writerow(header)
     for row in rows:
         writer.writerow([csv_safe(c) for c in row])

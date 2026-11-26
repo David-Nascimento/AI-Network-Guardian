@@ -16,7 +16,7 @@ API = "/api/v1"
 
 
 def rows_of(text: str) -> list[list[str]]:
-    return list(csv.reader(io.StringIO(text.removeprefix("﻿"))))
+    return list(csv.reader(io.StringIO(text.removeprefix("﻿")), delimiter=";"))
 
 
 def test_summary_aggregates_real_data(
