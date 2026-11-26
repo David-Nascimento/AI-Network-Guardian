@@ -21,19 +21,40 @@ Detalhes de cada recurso: [docs/funcionalidades.md](docs/funcionalidades.md).
 
 Requisitos: Python 3.12+ e Node 20+.
 
-```bash
-# Backend (em backend/)
+**Terminal 1 — backend**
+
+```powershell
+# Windows (PowerShell)
+cd backend
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+Copy-Item ..\.env.example .env     # edite o .env: defina NG_ADMIN_PASSWORD (10+ caracteres)
+alembic upgrade head
+uvicorn --factory app.main:create_app --reload --port 8000
+```
+
+```bash
+# Linux/macOS
+cd backend
+python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 cp ../.env.example .env            # defina NG_ADMIN_PASSWORD (10+ caracteres)
 alembic upgrade head
 uvicorn --factory app.main:create_app --reload --port 8000
+```
 
-# Frontend (em frontend/)
+**Terminal 2 — frontend** (a partir da raiz do projeto)
+
+```bash
+cd frontend
 npm install
 npm run dev                        # http://localhost:5180
 ```
+
+Nas próximas vezes, basta ativar o venv (`.\.venv\Scripts\Activate.ps1`) e rodar o `uvicorn`,
+e rodar `npm run dev` no frontend. Se o PowerShell bloquear o script de ativação, use
+`.\.venv\Scripts\python.exe -m uvicorn --factory app.main:create_app --reload --port 8000`.
 
 Entre com `admin` e a senha de `NG_ADMIN_PASSWORD`. Para descobrir dispositivos da sua LAN, rode
 o backend localmente (não em Docker no Windows/macOS) e, se preciso, defina `NG_SCAN_NETWORK`
