@@ -1,0 +1,46 @@
+@import "@fontsource-variable/inter";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 25% 97%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --muted: 214 32% 94%;
+    --muted-foreground: 215 16% 40%;
+    --border: 214 25% 85%;
+    --primary: 192 90% 32%;
+    --primary-foreground: 0 0% 100%;
+    --success: 142 72% 30%;
+    --warning: 38 92% 40%;
+    --danger: 0 72% 46%;
+    --network: 199 89% 38%;
+    --ai: 262 70% 50%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
+    --card: 222 40% 10%;
+    --muted: 222 32% 15%;
+    --muted-foreground: 215 20% 65%;
+    --border: 222 25% 20%;
+    --primary: 189 94% 43%;
+    --primary-foreground: 222 47% 8%;
+    --success: 142 71% 45%;
+    --warning: 45 93% 52%;
+    --danger: 0 84% 62%;
+    --network: 199 89% 60%;
+    --ai: 262 83% 72%;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}

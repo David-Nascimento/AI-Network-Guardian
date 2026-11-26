@@ -1,0 +1,49 @@
+# AI Network Guardian — Fases 1 e 2
+# Uso: cp .env.example .env  (edite os segredos)  &&  docker compose up -d --build
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: guardian
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+      POSTGRES_DB: guardian
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guardian -d guardian"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      NG_ENVIRONMENT: production
+      NG_DATABASE_URL: postgresql+psycopg://guardian:${POSTGRES_PASSWORD}@db:5432/guardian
+      NG_SECRET_KEY: ${NG_SECRET_KEY:?defina NG_SECRET_KEY (32+ caracteres) no .env}
+      NG_ADMIN_USERNAME: ${NG_ADMIN_USERNAME:-admin}
+      NG_ADMIN_PASSWORD: ${NG_ADMIN_PASSWORD:?defina NG_ADMIN_PASSWORD (10+ caracteres) no .env}
+      NG_GATEWAY_HOST: ${NG_GATEWAY_HOST:-}
+      NG_CORS_ORIGINS: ${NG_CORS_ORIGINS:-http://localhost:8080}
+      NG_LOG_JSON: "true"
+    # O ping sem root depende deste sysctl dentro do container.
+    sysctls:
+      net.ipv4.ping_group_range: "0 2147483647"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      # Somente localhost por padrão: não exponha o portal na internet.
+      - "127.0.0.1:8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:

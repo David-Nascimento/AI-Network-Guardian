@@ -1,0 +1,29 @@
+# Segredos e configuração local
+.env
+*.env.local
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Bancos locais
+*.db
+*.sqlite3
+
+# Node / frontend
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+
+# Pacotes de entrega e lixo do SO
+*.zip
+.DS_Store
+Thumbs.db
